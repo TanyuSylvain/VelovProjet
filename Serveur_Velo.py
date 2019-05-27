@@ -38,13 +38,21 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     if self.path_info[0] == 'time':
       self.send_time()
    
-     # le chemin d'accès commence par /regions
+     # le chemin d'accès commence par /stations
+    elif self.path_info[0] == 'stations':
+      self.send_stations()
+      
+    # le chemin d'accès commence par /disponibilité de velos
+    elif self.path_info[0] == 'disponibilité de velos':
+      self.send_disponibilite_velos()
+      
+    # le chemin d'accès commence par /disponibilité de stands
+    elif self.path_info[0] == 'disponibilité de stands':
+      self.send_disponibilite_velos()
+      
+    # le chemin d'accès commence par /regions
     elif self.path_info[0] == 'regions':
       self.send_regions()
-      
-    # le chemin d'accès commence par /ponctualite
-    elif self.path_info[0] == 'ponctualite':
-      self.send_ponctualite()
       
     # ou pas...
     else:
@@ -125,25 +133,25 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     conn = sqlite3.connect('velov.sqlite')
     c = conn.cursor()
     
-    c.execute("SELECT * FROM 'regions'")
-    r = c.fetchall()
+    c.execute("SELECT * FROM 'station-velov2018'")
+    s = c.fetchall()
     
     headers = [('Content-Type','application/json')];
-    body = json.dumps([{'nom':n, 'lat':lat, 'lon': lon} for (n,lat,lon) in r])
+    body = json.dumps([{'nom':nom, 'idstation':idstation , 'Y':Y, 'X': X} for (nom,idstation,Y,X) in s])
     self.send(body,headers)
 
   #
-  # On génère et on renvoie un graphique de ponctualite (cf. TD1)
+  # On génère et on renvoie un graphique de disponibilite (cf. TD1)
   #
-  def send_ponctualite(self):
+  def send_disponibilite(self):
 
     conn = sqlite3.connect('Velov.sqlite')
     c = conn.cursor()
     
-    c.execute("SELECT DISTINCT Région FROM 'regularite-mensuelle-ter'")
-    reg = c.fetchall()
-    if (self.path_info[1],) in reg:   # Rq: reg est une liste de tuples
-        regions = [(self.path_info[1],"blue")]
+    c.execute("SELECT DISTINCT velov_number FROM 'velov-histo2018'")
+    disp = c.fetchall()
+    if (self.path_info[1],) in disp:   # Rq: reg est une liste de tuples
+        disponibilite = [(self.path_info[1],"blue")]
     else:
         print ('Erreur nom')
         self.send_error(404)    # Région non trouvée -> erreur 404
@@ -160,22 +168,22 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     ax.xaxis.set_major_formatter(pltd.DateFormatter('%B %Y'))
     ax.xaxis.set_tick_params(labelsize=10)
     ax.xaxis.set_label_text("Date")
-    ax.yaxis.set_label_text("% de régularité")
+    ax.yaxis.set_label_text("% de disponibilité")
             
     # boucle sur les régions
-    for l in (regions) :
-        c.execute("SELECT * FROM 'regularite-mensuelle-ter' WHERE Région=? ORDER BY Date",l[:1])  # ou (l[0],)
-        r = c.fetchall()
+    for l in (disponibilite) :
+        c.execute("SELECT * FROM 'velov-histo2018' WHERE velov_number=? ORDER BY Date",l[:1])  # ou (l[0],)
+        d = c.fetchall()
         # recupération de la date (colonne 2) et transformation dans le format de pyplot
         x = [pltd.date2num(dt.date(int(a[1][:4]),int(a[1][5:]),1)) for a in r if not a[7] == '']
-        # récupération de la régularité (colonne 8)
+        # récupération de la disponibilité (colonne 8)
         y = [float(a[7]) for a in r if not a[7] == '']
         # tracé de la courbe
         plt.plot(x,y,linewidth=1, linestyle='-', marker='o', color=l[1], label=l[0])
         
     # légendes
     plt.legend(loc='lower left')
-    plt.title('Régularité des TER (en %)',fontsize=16)
+    plt.title('Disponibilité des velovs (en %)',fontsize=16)
 
     # génération des courbes dans un fichier PNG
     fichier = 'courbes/ponctualite_'+self.path_info[1] +'.png'
@@ -184,7 +192,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     
     #html = '<img src="/{}?{}" alt="ponctualite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
     body = json.dumps({
-            'title': 'Régularité TER '+self.path_info[1], \
+            'title': 'Disponibilité des velovs '+self.path_info[1], \
             'img': '/'+fichier \
              });
     # on envoie

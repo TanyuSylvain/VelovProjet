@@ -50,10 +50,6 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     elif self.path_info[0] == 'disponibilité de stands':
       self.send_disponibilite_velos()
       
-    # le chemin d'accès commence par /regions
-    elif self.path_info[0] == 'regions':
-      self.send_regions()
-      
     # ou pas...
     else:
       self.send_static()

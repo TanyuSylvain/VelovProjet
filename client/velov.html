@@ -10,7 +10,7 @@
   
 <body onload="load_data();">  <!-- Récupération des données avec le chargement de la page -->
 
-  <h1>Mes lieux insolites à la Croix-Rousse</h1>
+  <h1>Distribution des stations Velov</h1>
  
   <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
   <div>
@@ -23,13 +23,14 @@
 
 
 <script>
+  
 // Creation d'une carte dans la balise div "map", et positionne la vue sur un point donné et un niveau de zoom
 var map = L.map('map').setView([45.775,4.83], 14);
 // Ajout d'une couche de dalles OpenStreetMap
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
      }).addTo(map);
-	 
+
 function load_data () {
 var xhr = new XMLHttpRequest();
 xhr.onload = function() {   // fonction callback

@@ -30,11 +30,13 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     c.execute("SELECT * FROM 'station-velov2018'")
     r = c.fetchall()
     data = []
+    nb=0
     for station in r:
-        data.append({'id': station[3],'name':station[4],'lat':station[1],'lon':station[0],\
+        data.append({'id': nb, 'idnum': station[3],'name':station[4],'lat':station[1],'lon':station[0],\
                       'adresse1':station[5],'adresse2':station[6],'commune':station[7],\
                         'numdansarr':station[8],'nbbornette':station[9],'pole':station[11],\
                           'ouverte':station[12],'insee':station[15]})
+        nb+=1
     if self.path_info[0] == "location":
         self.send_json(data)
 
@@ -45,7 +47,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     # requête générique
     elif self.path_info[0] == "service":
       self.send_html('<p>Path info : <code>{}</p><p>Chaîne de requête : <code>{}</code></p>' \
-          .format('/'.join(self.path_info),self.query_string));
+          .format('/'.join(self.path_info),self.query_string))
 
     else:
       self.send_static()
@@ -63,7 +65,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     # requête générique
     if self.path_info[0] == "service":
       self.send_html(('<p>Path info : <code>{}</code></p><p>Chaîne de requête : <code>{}</code></p>' \
-          + '<p>Corps :</p><pre>{}</pre>').format('/'.join(self.path_info),self.query_string,self.body));
+          + '<p>Corps :</p><pre>{}</pre>').format('/'.join(self.path_info),self.query_string,self.body))
 
     else:
       self.send_error(405)
@@ -77,11 +79,11 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     
     
     # On teste que la région demandée existe bien
-    c.execute("SELECT DISTINCT Région FROM 'regularite-mensuelle-ter'")
-    reg = c.fetchall()
+    c.execute("SELECT DISTINCT velov_number FROM 'velov-histo2018'")
+    station = c.fetchall()
     idn = int(self.path_info[1])
-    if (data[idn-1]['name'],) in reg:   # Rq: reg est une liste de tuples
-        regions = [(data[idn-1]['name'],"blue")]
+    if ('velov-'+ str(data[idn-1]['idnum']),) in station:   # Rq: reg est une liste de tuples
+        stations = [('velov-'+ str(data[idn-1]['idnum']),"blue")]
     else:
         print ('Erreur nom')
         self.send_error(404)    # Région non trouvée -> erreur 404
@@ -89,7 +91,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     
     # configuration du tracé
     plt.figure(figsize=(18,6))
-    plt.ylim(80,100)
+    plt.ylim(0,15)
     plt.grid(which='major', color='#888888', linestyle='-')
     plt.grid(which='minor',axis='x', color='#888888', linestyle=':')
     
@@ -103,27 +105,27 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     ax.xaxis.set_tick_params(labelsize=10)
     
     # boucle sur les régions
-    for l in (regions) :
-        c.execute("SELECT * FROM 'regularite-mensuelle-ter' WHERE Région=? ORDER BY Date",l[:1])  # ou (l[0],)
+    for l in (stations) :
+        c.execute("SELECT * FROM 'velov-histo2018' WHERE velov_number=? ORDER BY Time_ISO",l[:1])  # ou (l[0],)
         r = c.fetchall()
         # recupération de la date (colonne 2) et transformation dans le format de pyplot
-        x = [pltd.date2num(dt.date(int(a[1][:4]),int(a[1][5:]),1)) for a in r if not a[7] == '']
+        x = [int(a[0][11:13]+a[0][14:16]) for a in r if not a[2] == '']
         # récupération de la régularité (colonne 8)
-        y = [float(a[7]) for a in r if not a[7] == '']
+        y = [float(a[2]) for a in r if not a[2] == '']
         # tracé de la courbe
         plt.plot_date(x,y,linewidth=1, linestyle='-', marker='o', color=l[1], label=l[0])
         
     # légendes
     plt.legend(loc='lower left')
-    plt.title('Régularité des TER (en %)',fontsize=16)
-    plt.ylabel('% de régularité')
-    plt.xlabel('Date')
+    plt.title('Disponibilité des velos',fontsize=16)
+    plt.ylabel('Nombre de velos disponibles')
+    plt.xlabel('temps')
 
     # génération des courbes dans un fichier PNG
-    fichier = 'courbe_ponctualite{}.png'.format(idn)
+    fichier = 'dispoVelo{}.png'.format(idn)
     plt.savefig('client/{}'.format(fichier))
 
-    html = '<img src="/{}?{}" alt="ponctualite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
+    html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
 
     headers = [('Content-Type','text/html;charset=utf-8')]
     self.send(html,headers)

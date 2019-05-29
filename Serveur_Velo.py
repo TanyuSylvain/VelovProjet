@@ -43,12 +43,12 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
       self.send_stations()
       
     # le chemin d'accès commence par /disponibilité de velos
-    elif self.path_info[0] == 'disponibilité de velos':
-      self.send_disponibilite_velos()
+    elif self.path_info[0] == 'disponibilité_de_velos':
+      self.send_disponibilite('velo')
       
     # le chemin d'accès commence par /disponibilité de stands
-    elif self.path_info[0] == 'disponibilité de stands':
-      self.send_disponibilite_velos()
+    elif self.path_info[0] == 'disponibilité_de_stands':
+      self.send_disponibilite('stand')
       
     # ou pas...
     else:
@@ -124,7 +124,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
   #
   # On génère et on renvoie la liste des régions et leur coordonnées (version TD3)
   #
-  def send_regions(self):
+  def send_stations(self):
 
     conn = sqlite3.connect('velov.sqlite')
     c = conn.cursor()
@@ -139,7 +139,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
   #
   # On génère et on renvoie un graphique de disponibilite (cf. TD1)
   #
-  def send_disponibilite(self):
+  def send_disponibilite(self,option):
 
     conn = sqlite3.connect('Velov.sqlite')
     c = conn.cursor()
@@ -171,9 +171,9 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         c.execute("SELECT * FROM 'velov-histo2018' WHERE velov_number=? ORDER BY Date",l[:1])  # ou (l[0],)
         d = c.fetchall()
         # recupération de la date (colonne 2) et transformation dans le format de pyplot
-        x = [pltd.date2num(dt.date(int(a[1][:4]),int(a[1][5:]),1)) for a in r if not a[7] == '']
+        x = [pltd.date2num(dt.date(int(a[1][:4]),int(a[1][5:]),1)) for a in d if not a[7] == '']
         # récupération de la disponibilité (colonne 8)
-        y = [float(a[7]) for a in r if not a[7] == '']
+        y = [float(a[7]) for a in d if not a[7] == '']
         # tracé de la courbe
         plt.plot(x,y,linewidth=1, linestyle='-', marker='o', color=l[1], label=l[0])
         

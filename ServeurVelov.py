@@ -41,7 +41,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_json(data)
 
     # requete description - retourne la description du lieu dont on passe l'id en paramètre dans l'URL
-    elif self.path_info[0] == "description":
+    elif self.path_info[0] == "disponibilite":
         self.send_ponctualite(data)
 
     # requête générique
@@ -76,8 +76,6 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
     conn = sqlite3.connect('Velov.sqlite')
     c = conn.cursor()
-    
-    
     # On teste que la région demandée existe bien
     c.execute("SELECT DISTINCT velov_number FROM 'velov-histo2018'")
     station = c.fetchall()

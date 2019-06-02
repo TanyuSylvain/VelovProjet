@@ -2,7 +2,7 @@
 
 
 
-<script src="leaflet.js"> // insertion biblioth¡§¡§que Leaflet : http://leafletjs.com/ </script>
+<script src="leaflet.js"> // insertion bibliothï¿½ï¿½ï¿½ï¿½que Leaflet : http://leafletjs.com/ </script>
 
 
 
@@ -18,7 +18,7 @@
 
   
 
-<body onload="load_data();">  <!-- R¡§|cup¡§|ration des donn¡§|es avec le chargement de la page -->
+<body onload="load_data();">  <!-- Rï¿½ï¿½|cupï¿½ï¿½|ration des donnï¿½ï¿½|es avec le chargement de la page -->
 
 
 
@@ -234,7 +234,7 @@ min
 
 <script>
 
-// Creation d'une carte dans la balise div "map", et positionne la vue sur un point donn¡§| et un niveau de zoom
+// Creation d'une carte dans la balise div "map", et positionne la vue sur un point donnï¿½ï¿½| et un niveau de zoom
 
 var map = L.map('map').setView([45.775,4.83], 14);
 
@@ -254,15 +254,15 @@ var xhr = new XMLHttpRequest();
 
 xhr.onload = function() {   // fonction callback
 
-    // r¡§|cup¡§|ration des donn¡§|es renvoy¡§|es par le serveur
+    // rï¿½ï¿½|cupï¿½ï¿½|ration des donnï¿½ï¿½|es renvoyï¿½ï¿½|es par le serveur
 
 	var data = JSON.parse(this.responseText);
 
-    // boucle sur les enregistrements renvoy¡§|s
+    // boucle sur les enregistrements renvoyï¿½ï¿½|s
 
     for ( n = 0; n < data.length; n++ ) {
 
-    // insertion d'un marqueur ¡§¡è la position, attachement d'une popup, capture de l'¡§|v¡§¡§nement "clic'
+    // insertion d'un marqueur ï¿½ï¿½ï¿½ï¿½ la position, attachement d'une popup, capture de l'ï¿½ï¿½|vï¿½ï¿½ï¿½ï¿½nement "clic'
 
 	  L.marker([data[n].lat,data[n].lon]).addTo(map)
 
@@ -270,7 +270,7 @@ xhr.onload = function() {   // fonction callback
 
 		.addEventListener('click',OnMarkerClick)
 
-		.idnum=data[n].id;   // propri¡§|t¡§| personnalis¡§|e ajout¡§| au marqueur
+		.idnum=data[n].id;   // propriï¿½ï¿½|tï¿½ï¿½| personnalisï¿½ï¿½|e ajoutï¿½ï¿½| au marqueur
 
 	  }
 
@@ -287,23 +287,20 @@ xhr.send();
 function OnMarkerClick (e) {
 
 var xhr = new XMLHttpRequest();
+xhr.open('GET','/disponibilite/'+e.target.idnum,true);  // on rï¿½ï¿½|cupï¿½ï¿½ï¿½ï¿½re la description du lieu n?? idnum par un appel au serveur
+xhr.send();
 
 xhr.onload = function() {   // fonction callback
 
-    // r¡§|cup¡§|ration des donn¡§|es renvoy¡§|es par le serveur
+    // rï¿½ï¿½|cupï¿½ï¿½|ration des donnï¿½ï¿½|es renvoyï¿½ï¿½|es par le serveur
 
 	var data = JSON.parse(this.responseText);
 
-	// affichage dans la zone 'description' du nom (reprise dans le popup) et de la description r¡§|cup¡§|r¡§| par l'appel au serveur
+	// affichage dans la zone 'description' du nom (reprise dans le popup) et de la description rï¿½ï¿½|cupï¿½ï¿½|rï¿½ï¿½| par l'appel au serveur
 
 	description.innerHTML =  '<b><i>' + e.target.getPopup().getContent() + '</i></b><br>'+ data.desc;
 
   };
-
-xhr.open('GET','/disponibilite/'+e.target.idnum,true);  // on r¡§|cup¡§¡§re la description du lieu n?? idnum par un appel au serveur
-
-xhr.send();
-
 }
 
 </script>

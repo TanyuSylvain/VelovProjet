@@ -13,7 +13,7 @@
   <!-- Zone pour l'affichage dynamique des descriptions -->
   <p id="figure"></p>
   </div>
- </body>
+</body>
 <h3>CHOISIR UNE PERIODE</h3>
 <label>De: 
 <select HeureDebut="HeureDebut" id="HeureDebut">
@@ -134,7 +134,7 @@ xhr.send();
 
 function OnMarkerClick (e) {
 var xhr = new XMLHttpRequest();
-xhr.open('GET','/description/'+e.target.idnum,true);  // on récupère la description du lieu n° idnum par un appel au serveur
+xhr.open('GET','/disponibilite/'+e.target.idnum,true);  // on récupère la description du lieu n° idnum par un appel au serveur
 xhr.send();
 xhr.onload = function() {   // fonction callback
     // récupération des données renvoyées par le serveur

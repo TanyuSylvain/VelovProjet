@@ -1,0 +1,129 @@
+﻿/* fond de page */
+body {
+background-image: url(velov.png);
+background-repeat: no-repeat;
+background-position: 0, 0;
+background-size:cover;
+}
+
+/* bandeau de titre */
+
+h2 { 
+  color: white;
+  text-align: right;
+  padding-margin: 15px;
+  padding-left: 15px; 
+  border: none;
+  box-shadow: inset 0 0 5px 5px rgba(129,0,0,0.6) ;
+  background-color: rgba(220,20,60,0.6);
+  margin-top: 0;
+  text-shadow: 3px 3px 3px black;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+
+h1 { 
+  color: white;
+  text-align: center;
+  border: none;
+  box-shadow: inset 0 0 5px 5px rgba(220,20,60,0.6) ;
+  border-radius: 30px/30px;
+  background-color: rgba(129,0,0,0.6);
+  margin-top: 0.5em;
+  text-shadow: 3px 3px 3px black;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+
+/* contenu de la page */
+
+nav{
+  padding-top: 15px;
+  padding-left: 15px; 
+  border: none;
+  box-shadow: inset 0 0 5px 5px rgba(220,20,60,0.6);
+  border-radius: 30px/30px;
+  background-color: rgba(129,0,0,0.6);
+  text-shadow: 3px 3px 3px black;
+  height: 53vh;
+  width: 53vw;
+  position: absolute;
+  left: 1%;
+  top: 22vh;
+
+ }
+
+
+aside {  
+  text-align: center;
+  padding-top: 15px;
+  border: none;
+  box-shadow: inset 0 0 5px 5px rgba(220,20,60,0.6);
+  border-radius: 30px/30px;
+  background-color: rgba(129,0,0,0.6);
+  text-shadow: 3px 3px 3px black;
+  height: 53vh;
+  width: 41vw;
+  position: absolute;
+  right: 1%;
+  top: 22vh;
+ }
+
+main {  
+  padding-top: 15px;
+  border: none;
+  box-shadow: inset 0 0 5px 5px rgba(220,20,60,0.6);
+  border-radius: 30px/30px;
+  background-color: rgba(129,0,0,0.6);
+  text-shadow: 3px 3px 3px black;
+  height: 53vh;
+  width: 98vw;
+  position: relative;
+  top:55vh;
+ }
+
+/* polices de caractères */
+body { font-family: Trebuchet MS, sans-serif; }
+
+/* positionnement des champs */
+label { display: block; }
+label span { display: inline-block; width: 5em; height: 1.5em; }
+
+/*
+input, textarea {
+  font-family: monospace;
+  padding: 2px 0.5em;
+  width: 5em;
+  font-size: 1.2em;
+  line-height: 1.33em;
+  color: white;
+  margin-top: 5px;
+}
+.button {
+  border: 3px outset #444;
+  background-color: #888;
+  padding: 5px 0.5em;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 1em 0;
+
+  color: #eee;
+  text-shadow: #000 -1px -1px 0;
+  right: calc(100% - 8em - 3px);
+}
+*/
+/*
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+*/
+a.delete:hover {
+  color: red;
+}
+#map { height: 50vh; width: 50vw; }

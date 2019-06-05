@@ -57,11 +57,10 @@ aside {
   border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
-
-  width: 25vw;
+  width:22%;
   position: absolute;
-  right: 1%;
-  top: 22vh;
+  left: 75%;
+  top: 25vh;
  }
 
 
@@ -77,10 +76,10 @@ main {
   border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
-  width: 35vw;
+  width: 35%;
   position: absolute;
-  left:2.5%;
-  top:69vh;
+  left:1.5%;
+  top:70vh;
  }
 
 main2 { 
@@ -95,10 +94,10 @@ main2 {
   border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
-  width: 52vw;
+  width: 52%;
   position: absolute;
-  left:43%;
-  top:69vh;
+  left:42%;
+  top:70vh;
  }
 
 f { 

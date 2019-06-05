@@ -1,0 +1,320 @@
+<!DOCTYPE html>  
+<script src="leaflet.js"> // insertion biblioth：：que Leaflet : http://leafletjs.com/ </script>
+<title>Velov Lyon</title>
+<link rel="stylesheet" type="text/css" href="leaflet.css" /> 
+<link rel="stylesheet" type="text/css" href="style.css"/>
+<meta charset="utf-8">
+
+<body onload="load_data();">  <!-- R：|cup：|ration des donn：|es avec le chargement de la page -->
+
+
+  <h2> Aller au site oficiel</h2>
+  <h1>Stations de Velov'</h1>
+
+ 
+
+  <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
+<nav>    
+<div id="map"></div>  
+</nav>
+
+
+
+
+
+
+<aside>
+<h3>Choisir une periode</h3>
+<label>
+  2018-11-<select id = "jour">
+    <option value = "05">05</option>
+    <option value = "06">06</option>
+    <option value = "07">07</option>
+  </select>
+</label>
+
+<label>De: 
+
+<select HeureDebut="HeureDebut" id="HeureDebut">
+
+<option value="0">0</option>
+
+<option value="1">1</option>
+
+<option value="2">2</option>
+
+<option value="3">3</option>
+
+<option value="4">4</option>
+
+<option value="5">5</option>
+
+<option value="6">6</option>
+
+<option value="7">7</option>
+
+<option value="8">8</option>
+
+<option value="9">9</option>
+
+<option value="10">10</option>
+
+<option value="11">11</option>
+
+<option value="12">12</option>
+
+<option value="13">13</option>
+
+<option value="14">14</option>
+
+<option value="15">15</option>
+
+<option value="16">16</option>
+
+<option value="17">17</option>
+
+<option value="18">18</option>
+
+<option value="19">19</option>
+
+<option value="20">20</option>
+
+<option value="21">21</option>
+
+<option value="22">22</option>
+
+<option value="23">23</option>
+
+<option value="24">24</option>
+
+</select>h
+
+<select MinuteDebut="MinuteDebut" id="MinuteDebut">
+
+<option value="0">0</option>
+
+<option value="5">5</option>
+
+<option value="10">10</option>
+
+<option value="15">15</option>
+
+<option value="20">20</option>
+
+<option value="25">25</option>
+
+<option value="30">30</option>
+
+<option value="35">35</option>
+
+<option value="40">40</option>
+
+<option value="45">45</option>
+
+<option value="50">50</option>
+
+<option value="55">55</option>
+
+<option value="60">60</option>
+
+</select>min, A:
+
+<select HeureFin="HeureFin" id="HeureFin">
+
+<option value="0">0</option>
+
+<option value="1">1</option>
+
+<option value="2">2</option>
+
+<option value="3">3</option>
+
+<option value="4">4</option>
+
+<option value="5">5</option>
+
+<option value="6">6</option>
+
+<option value="7">7</option>
+
+<option value="8">8</option>
+
+<option value="9">9</option>
+
+<option value="10">10</option>
+
+<option value="11">11</option>
+
+<option value="12">12</option>
+
+<option value="13">13</option>
+
+<option value="14">14</option>
+
+<option value="15">15</option>
+
+<option value="16">16</option>
+
+<option value="17">17</option>
+
+<option value="18">18</option>
+
+<option value="19">19</option>
+
+<option value="20">20</option>
+
+<option value="21">21</option>
+
+<option value="22">22</option>
+
+<option value="23">23</option>
+
+<option value="24">24</option>
+
+</select>h
+
+<select MinuteFin="MinuteFin" id="MinuteFin">
+
+<option value="0">0</option>
+
+<option value="5">5</option>
+
+<option value="10">10</option>
+
+<option value="15">15</option>
+
+<option value="20">20</option>
+
+<option value="25">25</option>
+
+<option value="30">30</option>
+
+<option value="35">35</option>
+
+<option value="40">40</option>
+
+<option value="45">45</option>
+
+<option value="50">50</option>
+
+<option value="55">55</option>
+
+<option value="60">60</option>
+
+</select>
+
+min
+
+</label>
+<label>
+  Mode Comparaison <select id = "comparaison">
+    <option value = "OUI">OUI</option>
+    <option value = "NON">NON</option>
+  </select>
+</label>
+<h4>Information de la station choisie</h4>
+<div>
+  <p id = 'stationId'></p>
+  <p id = 'Nom'></p>
+  <p id = 'adresse1'></p>
+  <p id = 'adresse2'></p>
+  <p id = 'commune'></p>
+  <p id = 'numdansarr'></p>
+  <p id = 'nbbornette'></p>
+  <p id = 'pole'></p>
+  <p id = 'ouverte'></p>
+  <p id = 'insee'></p>
+<h5 style="position:relative;top:1.5vh"> 
+Hirtoire des Velov's</h5>
+
+Velo'v designe un systeme de velos en libre-service mis en place dans la metropole de Lyon et gere par l'entreprise JCDecaux depuis le 19 mai 2005. C'est le nom sous lequel JCDecaux exploite son systeme Cyclocity a Lyon et Villeurbanne.
+
+</aside>
+
+
+<main>
+  <!-- Zone pour l'affichage dynamique des descriptions -->
+
+  <p id="description"></p>
+
+</main>
+
+</body>
+
+
+
+<script>
+
+// Creation d'une carte dans la balise div "map", et positionne la vue sur un point donn：| et un niveau de zoom
+
+var map = L.map('map').setView([45.775,4.83], 14);
+
+// Ajout d'une couche de dalles OpenStreetMap
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+
+     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+
+     }).addTo(map);
+
+	 
+
+function load_data () {
+
+var xhr = new XMLHttpRequest();
+
+xhr.onload = function() {   // fonction callback
+
+    // r：|cup：|ration des donn：|es renvoy：|es par le serveur
+
+	var data = JSON.parse(this.responseText);
+
+    // boucle sur les enregistrements renvoy：|s
+
+    for ( n = 0; n < data.length; n++ ) {
+
+    // insertion d'un marqueur ：∴ la position, attachement d'une popup, capture de l'：|v：：nement "clic'
+
+	  L.marker([data[n].lat,data[n].lon]).addTo(map)
+
+        .bindPopup('Lieu = '+data[n].name)
+
+		.addEventListener('click',OnMarkerClick)
+
+		.idnum=data[n].id;   // propri：|t：| personnalis：|e ajout：| au marqueur
+
+	  }
+
+  };
+
+xhr.open('GET','/location',true);
+
+xhr.send();
+
+}
+
+
+
+function OnMarkerClick (e) {
+
+var xhr = new XMLHttpRequest();
+
+xhr.onload = function() {   // fonction callback
+
+    // r：|cup：|ration des donn：|es renvoy：|es par le serveur
+
+	var data = JSON.parse(this.responseText);
+
+	// affichage dans la zone 'description' du nom (reprise dans le popup) et de la description r：|cup：|r：| par l'appel au serveur
+
+	description.innerHTML =  '<b><i>' + e.target.getPopup().getContent() + '</i></b><br>'+ data.desc;
+
+  };
+
+xhr.open('GET','/disponibilite/'+e.target.idnum,true);  // on r：|cup：：re la description du lieu n?? idnum par un appel au serveur
+
+xhr.send();
+
+}
+
+</script>

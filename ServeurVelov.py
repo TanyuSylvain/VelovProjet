@@ -121,7 +121,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     '''
     # configuration du tracé
     plt.figure(figsize=(12,6))
-    plt.ylim(0,15)
+    plt.ylim(0,30)
     plt.grid(which='major', color='#888888', linestyle='-')
     plt.grid(which='minor',axis='x', color='#888888', linestyle=':')
     
@@ -185,7 +185,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                         'commune':'Commune : '+data[idn-1]['commune'],\
                         'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn-1]['numdansarr']),\
                         'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn-1]['nbbornette']),\
-                        'pole':'Pole'+data[idn-1]['pole'],\
+                        'pole':'Pole : '+data[idn-1]['pole'],\
                         'ouverte':'Etat ouverture :'+data[idn-1]['ouverte'],\
                         'insee': 'Code INSEE : '+str(data[idn-1]['insee']),\
                         'image':html})

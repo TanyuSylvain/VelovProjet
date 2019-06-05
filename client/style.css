@@ -41,7 +41,7 @@ nav{
   width: 68vw;
   position: absolute;
   left: 1%;
-  top: 13vh;
+  top: 15vh;
 
  }
 
@@ -78,8 +78,8 @@ main {
   text-shadow: 3px 3px 3px black;
   width: 35%;
   position: absolute;
-  left:1.5%;
-  top:70vh;
+  right:60%;
+  top:73vh;
  }
 
 main2 { 
@@ -87,17 +87,17 @@ main2 {
   text-align: center; 
   padding-top: 25px;
   padding-left: 15px;
-  padding-bottom: 22px;
+  padding-bottom: 21px;
   padding-right: 15px;
   border: none;
   box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
   border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
-  width: 52%;
+  width: 49%;
   position: absolute;
-  left:42%;
-  top:70vh;
+  left:45%;
+  top:73vh;
  }
 
 f { 
@@ -115,7 +115,7 @@ f {
   width: 94vw;
   position: absolute;
   left:1%;
-  top:100vh;
+  top:150vh;
  }
 
 /* polices de caractères */

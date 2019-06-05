@@ -1,25 +1,17 @@
 ﻿/* fond de page */
 body {
+background-image: url(test.jpeg);
+background-repeat: no-repeat;
+background-position: 0, 0;
+background-size:cover;
+
 
 background-color:white;
 }
 
 /* bandeau de titre */
 
-h2 { 
-  color: white;
-  text-align: right;
-  padding-margin: 15px;
-  padding-left: 15px; 
-  border: none;
-  box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
-  background-color: rgba(153,13,34,0.8);
-  margin-top: 0;
-  text-shadow: 3px 3px 3px black;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  margin-bottom: 0.5em;
-}
+
 
 
 h1 { 
@@ -48,10 +40,10 @@ nav{
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
   height: 53vh;
-  width: 53vw;
+  width: 68vw;
   position: absolute;
   left: 1%;
-  top: 22vh;
+  top: 13vh;
 
  }
 
@@ -63,13 +55,13 @@ aside {
   border: none;
   box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
   border-radius: 30px/30px;
-  background-color: rgba(153,13,34,0.6);
+  background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
   height: 53vh;
-  width: 41vw;
+  width: 20vw;
   position: absolute;
   right: 1%;
-  top: 22vh;
+  top: 13vh;
  }
 
 main {  
@@ -125,4 +117,4 @@ a {
 a.delete:hover {
   color: red;
 }
-#map { height: 50vh; width: 50vw; }
+#map { height: 50vh; width: 65vw; }

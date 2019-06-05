@@ -9,7 +9,6 @@
   <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
   <div>
   <div id="map"></div>  
-  <p/>
   </div>
 <h3>CHOISIR UNE PERIODE</h3>
 <label>
@@ -177,8 +176,8 @@ xhr.onload = function() {   // fonction callback
     document.getElementById('numdansarr').innerHTML = data.numdansarr;
     document.getElementById('nbbornette').innerHTML = data.nbbornette;
     document.getElementById('pole').innerHTML = data.pole;
-    document.getElementById('ouverte').innerHTML = data.ouverture;
-    document.getElementById('insee').innerHTML = data.html;
+    document.getElementById('ouverte').innerHTML = data.ouverte;
+    document.getElementById('insee').innerHTML = data.image;
 
   };
 

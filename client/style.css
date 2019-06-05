@@ -1,13 +1,10 @@
-HEAD
 ﻿/* fond de page */
 body {
 background-image: url(test.jpeg);
 background-repeat: no-repeat;
 background-position: 0, 0;
 background-size:cover;
-
-
-background-color:white;
+background-color:grey;
 }
 
 /* bandeau de titre */
@@ -20,7 +17,7 @@ h1 {
   text-align: center;
   border: none;
   box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
-  border-radius: 30px/30px;
+  border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   margin-top: 0.5em;
   text-shadow: 3px 3px 3px black;
@@ -37,7 +34,7 @@ nav{
   padding-left: 15px; 
   border: none;
   box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
-  border-radius: 30px/30px;
+  border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
   height: 53vh;
@@ -52,30 +49,71 @@ nav{
 aside {  
   color: white;
   text-align: center;
+  vertical-align:center ;
   padding-top: 15px;
   border: none;
   box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
-  border-radius: 30px/30px;
+  border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
-  height: 53vh;
-  width: 20vw;
+  height: 30vh;
+  width: 25vw;
   position: absolute;
   right: 1%;
-  top: 13vh;
+  top: 22vh;
  }
 
-main {  
-  padding-top: 15px;
+main { 
+  color: white;
+  text-align: left; 
+  padding-top: 5px;
+  padding-left: 15px;
   border: none;
   box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
-  border-radius: 30px/30px;
+  border-radius: 10px/10px;
   background-color: rgba(153,13,34,0.8);
   text-shadow: 3px 3px 3px black;
-  height: 53vh;
-  width: 98vw;
-  position: relative;
-  top:55vh;
+  height: 70vh;
+  width: 35vw;
+  position: absolute;
+  left:2.5%;
+  top:69vh;
+ }
+
+main2 { 
+  color: white;
+  text-align: center; 
+  padding-top: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
+  border-radius: 10px/10px;
+  background-color: rgba(153,13,34,0.8);
+  text-shadow: 3px 3px 3px black;
+  height: 68vh;
+  width: 54vw;
+  position: absolute;
+  left:41%;
+  top:69vh;
+ }
+
+f { 
+  color: white;
+  text-align: left; 
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  box-shadow: inset 0 0 5px 5px rgba(197,46,64,0.6);
+  border-radius: 10px/10px;
+  background-color: rgba(153,13,34,0.8);
+  text-shadow: 3px 3px 3px black;
+  height: 15vh;
+  width: 95vw;
+  position: absolute;
+  left:1%;
+  top:140vh;
  }
 
 /* polices de caractères */

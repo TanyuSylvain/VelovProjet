@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>  
+<script src="leaflet.js"> // insertion biblioth����que Leaflet : http://leafletjs.com/ </script>
+<title>carte glissante</title>
+<link rel="stylesheet" type="text/css" href="leaflet.css" /> 
+<link rel="stylesheet" type="text/css" href="style.css"/>
+<meta charset="utf-8">
+<body onload="load_data();">  <!-- R��|cup��|ration des donn��|es avec le chargement de la page -->
+  <h1>STATIONS DE VELO</h1>
+  <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
+  <div>
+  <div id="map"></div>  
+  </div>
+<h3>CHOISIR UNE PERIODE</h3>
+<label>
+  2018-11-<select id = "jour">
+    <option value = "05">05</option>
+    <option value = "06">06</option>
+    <option value = "07">07</option>
+  </select>
+</label>
+<label>De: 
+<select HeureDebut="HeureDebut" id="HeureDebut">
+<option value="00">00</option>
+<option value="01">01</option>
+<option value="02">02</option>
+<option value="03">03</option>
+<option value="04">04</option>
+<option value="05">05</option>
+<option value="06">06</option>
+<option value="07">07</option>
+<option value="08">08</option>
+<option value="09">09</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+</select>h
+<select MinuteDebut="MinuteDebut" id="MinuteDebut">
+<option value="00">00</option>
+<option value="05">05</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="35">35</option>
+<option value="40">40</option>
+<option value="45">45</option>
+<option value="50">50</option>
+<option value="55">55</option>
+<option value="60">60</option>
+</select>min, A:
+<select HeureFin="HeureFin" id="HeureFin">
+<option value="00">00</option>
+<option value="01">01</option>
+<option value="02">02</option>
+<option value="03">03</option>
+<option value="04">04</option>
+<option value="05">05</option>
+<option value="06">06</option>
+<option value="07">07</option>
+<option value="08">08</option>
+<option value="09">09</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+</select>h
+<select MinuteFin="MinuteFin" id="MinuteFin">
+<option value="00">00</option>
+<option value="05">05</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="35">35</option>
+<option value="40">40</option>
+<option value="45">45</option>
+<option value="50">50</option>
+<option value="55">55</option>
+<option value="60">60</option>
+</select>
+min
+</label>
+<label>
+  Mode Comparaison <select id = "comparaison">
+    <option value = "OUI">OUI</option>
+    <option value = "NON">NON</option>
+  </select>
+</label>
+<h4>Information de la station choisie</h4>
+<div>
+  <p id = 'stationId'></p>
+  <p id = 'Nom'></p>
+  <p id = 'adresse1'></p>
+  <p id = 'adresse2'></p>
+  <p id = 'commune'></p>
+  <p id = 'numdansarr'></p>
+  <p id = 'nbbornette'></p>
+  <p id = 'pole'></p>
+  <p id = 'ouverte'></p>
+  <p id = 'insee'></p>
+</div>
+<!-- Zone pour l'affichage dynamique des descriptions -->
+<p id="figure"></p>
+</body>
+<script>
+  
+// Creation d'une carte dans la balise div "map", et positionne la vue sur un point donné et un niveau de zoom
+var map = L.map('map').setView([45.775,4.83], 14);
+// Ajout d'une couche de dalles OpenStreetMap
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+     }).addTo(map);
+
+function load_data () {
+var xhr = new XMLHttpRequest();
+xhr.onload = function() {   // fonction callback
+    // récupération des données renvoyées par le serveur
+	var data = JSON.parse(this.responseText);
+    // boucle sur les enregistrements renvoyés
+    for ( n = 0; n < data.length; n++ ) {
+    // insertion d'un marqueur à la position, attachement d'une popup, capture de l'évènement "clic'
+	  L.marker([data[n].lat,data[n].lon]).addTo(map)
+        .bindPopup('Lieu = '+data[n].name)
+		.addEventListener('click',OnMarkerClick)
+		.idnum=data[n].id;   // propriété personnalisée ajouté au marqueur
+	  }
+  };
+xhr.open('GET','/location',true);
+xhr.send();
+}
+
+function OnMarkerClick (e) {
+var xhr = new XMLHttpRequest();
+var jr = document.getElementById('jour').value,
+      hd = document.getElementById('HeureDebut').value,
+      md = document.getElementById('MinuteDebut').value,
+      hf = document.getElementById('HeureFin').value,
+      mf = document.getElementById('MinuteFin').value,
+      cp = document.getElementById('comparaison').value;
+      var queryString = 'jr='+jr+'&'+'hd='+hd+'&'+'md='+md+'&'+'hf='+hf+'&'+'mf='+mf+'&'+'cp='+cp
+xhr.open('GET','/disponibilite/'+e.target.idnum+'?'+queryString,true);  // on récupère la description du lieu n° idnum par un appel au serveur
+xhr.send();
+xhr.onload = function() {   // fonction callback
+    // récupération des données renvoyées par le serveur
+    var data = JSON.parse(this.responseText)
+    document.getElementById('stationId').innerHTML = data.stationId;
+    document.getElementById('Nom').innerHTML = data.name;
+    document.getElementById('adresse1').innerHTML = data.adresse1;
+    document.getElementById('adresse2').innerHTML = data.adresse2;
+    document.getElementById('commune').innerHTML = data.commune;
+    document.getElementById('numdansarr').innerHTML = data.numdansarr;
+    document.getElementById('nbbornette').innerHTML = data.nbbornette;
+    document.getElementById('pole').innerHTML = data.pole;
+    document.getElementById('ouverte').innerHTML = data.ouverte;
+    document.getElementById('insee').innerHTML = data.image;
+
+  };
+
+}
+
+</script>

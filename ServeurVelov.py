@@ -82,8 +82,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                 (StationId, Jour, HeureDebut, MinuteDebut, HeureFin, MinuteFin, Comparaison)''')
     c.execute("SELECT * FROM 'historique'")
     hist = c.fetchall()
-    donnee = {'stationId':str(data[idn-1]['idnum']), 'jour':self.params['jr'][0], 'heureDebut':self.params['hd'][0], 'minuteDebut':self.params['md'][0], \
-              'heureFin':self.params['hf'][0], 'minuteFin':self.params['mf'][0], 'comparaison':self.params['cp'][0], 'compense':''}
+    donnee = {'stationId':str(data[idn]['idnum']), 'jour':self.params['jr'][0], 'heureDebut':self.params['hd'][0], 'minuteDebut':self.params['md'][0], \
+              'heureFin':self.params['hf'][0], 'minuteFin':self.params['mf'][0], 'comparaison':self.params['cp'][0]}
     stations = ['velov-'+ donnee['stationId']]
     #Mode comparaison
     if donnee['comparaison'] == 'OUI':
@@ -95,10 +95,30 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     interList = list(set(stations))
     interList.sort(key=stations.index)
     stations = interList[:]
-    if donnee.keys() not in hist:
+    if tuple(donnee.values()) not in hist:
       c.execute("INSERT INTO historique VALUES (?, ?, ?, ?, ?, ?, ?)", \
       (donnee['stationId'],donnee['jour'],donnee['heureDebut'],donnee['minuteDebut'],donnee['heureFin'],donnee['minuteFin'],donnee['comparaison']))
-    #else:
+    else:
+      fichier = 'dispoVelo{}.png'.format(idn)
+      html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
+      if data[idn]['adresse2']:
+        adresse2 = data[idn]['adresse2']
+      else:
+        adresse2 = 'Vide'
+      body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
+                        'name':'Nom de la station : '+data[idn]['name'],\
+                        'adresse1':'Adresse : '+data[idn]['adresse1'],\
+                        'adresse2':'Complément : '+adresse2,\
+                        'commune':'Commune : '+data[idn]['commune'],\
+                        'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
+                        'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
+                        'pole':'Pole : '+data[idn]['pole'],\
+                        'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
+                        'insee': 'Code INSEE : '+str(data[idn]['insee']),\
+                        'image':html})
+      headers = [('Content-Type','application/json')]
+      self.send(body,headers)
+      return
       
     
 
@@ -162,32 +182,36 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     plt.title('Disponibilité des velos',fontsize=16)
     plt.ylabel('Nombre de velos disponibles')
     plt.xlabel('temps')
-    lx = len(x)
-    if lx == 0:
-      print('Veuillez choisir la plage temporelle')
-      self.send_error(404)
-      return None
+    
+    
     #x_ticks = [x[int(lx/10*i)] for i in range(0,11)]
     #plt.xticks(x_ticks)
     #plt.gcf().autofmt_xdate()
     # génération des courbes dans un fichier PNG
-    fichier = 'dispoVelo{}.png'.format(idn)
-    plt.savefig('client/{}'.format(fichier))
-    html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
-    if data[idn-1]['adresse2']:
-      adresse2 = data[idn-1]['adresse2']
+    
+    lx = len(x)
+    if lx == 0:
+      print('Veuillez choisir la plage temporelle OU station fermée')
+      html = "Veuillez choisir la plage temporelle. Si vous l'avez bien choisie, \
+              la station que vous consultez est actuellement fermée"
+    else :
+      fichier = 'dispoVelo{}.png'.format(idn)
+      plt.savefig('client/{}'.format(fichier))
+      html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
+    if data[idn]['adresse2']:
+      adresse2 = data[idn]['adresse2']
     else:
       adresse2 = 'Vide'
     body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
-                        'name':'Nom de la station : '+data[idn-1]['name'],\
-                        'adresse1':'Adresse : '+data[idn-1]['adresse1'],\
+                        'name':'Nom de la station : '+data[idn]['name'],\
+                        'adresse1':'Adresse : '+data[idn]['adresse1'],\
                         'adresse2':'Complément : '+adresse2,\
-                        'commune':'Commune : '+data[idn-1]['commune'],\
-                        'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn-1]['numdansarr']),\
-                        'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn-1]['nbbornette']),\
-                        'pole':'Pole : '+data[idn-1]['pole'],\
-                        'ouverte':'Etat ouverture :'+data[idn-1]['ouverte'],\
-                        'insee': 'Code INSEE : '+str(data[idn-1]['insee']),\
+                        'commune':'Commune : '+data[idn]['commune'],\
+                        'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
+                        'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
+                        'pole':'Pole : '+data[idn]['pole'],\
+                        'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
+                        'insee': 'Code INSEE : '+str(data[idn]['insee']),\
                         'image':html})
     headers = [('Content-Type','application/json')]
     self.send(body,headers)
@@ -265,5 +289,5 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
 # instanciation et lancement du serveur
-httpd = socketserver.TCPServer(("", 8081), RequestHandler)
+httpd = socketserver.TCPServer(("", 8082), RequestHandler)
 httpd.serve_forever()

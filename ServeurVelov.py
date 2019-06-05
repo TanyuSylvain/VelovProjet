@@ -10,6 +10,7 @@ import sqlite3
 import matplotlib.pyplot as plt
 import datetime as dt
 import matplotlib.dates as pltd
+import numpy as np
 
 # définition du handler
 class RequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -32,17 +33,17 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     data = []
     nb=0
     for station in r:
-        data.append({'id': nb, 'idnum': station[3],'name':station[4],'lat':station[1],'lon':station[0],\
-                      'adresse1':station[5],'adresse2':station[6],'commune':station[7],\
-                        'numdansarr':station[8],'nbbornette':station[9],'pole':station[11],\
-                          'ouverte':station[12],'insee':station[15]})
-        nb+=1
+      data.append({'id': nb, 'idnum': station[3],'name':station[4],'lat':station[1],'lon':station[0],\
+                    'adresse1':station[5],'adresse2':station[6],'commune':station[7],\
+                    'numdansarr':station[8],'nbbornette':station[9],'pole':station[11],\
+                    'ouverte':station[12],'insee':station[15]})
+      nb+=1
     if self.path_info[0] == "location":
-        self.send_json(data)
+      self.send_json(data)
 
     # requete description - retourne la description du lieu dont on passe l'id en paramètre dans l'URL
     elif self.path_info[0] == "disponibilite":
-        self.send_ponctualite(data)
+      self.send_disponibilite(data)
 
     # requête générique
     elif self.path_info[0] == "service":
@@ -72,62 +73,130 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
   # on envoie le document statique demandé
-  def send_ponctualite(self,data):
+  def send_disponibilite(self,data):
+    # Mise à jour de la base de donnée Cache
+    idn = int(self.path_info[1])
+    conn = sqlite3.connect('cache.sqlite')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS historique 
+                (StationId, Jour, HeureDebut, MinuteDebut, HeureFin, MinuteFin, Comparaison)''')
+    c.execute("SELECT * FROM 'historique'")
+    hist = c.fetchall()
+    donnee = {'stationId':str(data[idn-1]['idnum']), 'jour':self.params['jr'][0], 'heureDebut':self.params['hd'][0], 'minuteDebut':self.params['md'][0], \
+              'heureFin':self.params['hf'][0], 'minuteFin':self.params['mf'][0], 'comparaison':self.params['cp'][0], 'compense':''}
+    stations = ['velov-'+ donnee['stationId']]
+    #Mode comparaison
+    if donnee['comparaison'] == 'OUI':
+      stations = ['velov-'+ donnee['stationId']]
+      cursor = -1
+      while hist[cursor][-1] == 'OUI':
+        stations.append('velov-'+hist[cursor][0])
+        cursor -= 1
+    interList = list(set(stations))
+    interList.sort(key=stations.index)
+    stations = interList[:]
+    if donnee.keys() not in hist:
+      c.execute("INSERT INTO historique VALUES (?, ?, ?, ?, ?, ?, ?)", \
+      (donnee['stationId'],donnee['jour'],donnee['heureDebut'],donnee['minuteDebut'],donnee['heureFin'],donnee['minuteFin'],donnee['comparaison']))
+    #else:
+      
+    
+
+    conn.commit()
+    conn.close()
 
     conn = sqlite3.connect('Velov.sqlite')
     c = conn.cursor()
     # On teste que la région demandée existe bien
+    '''
     c.execute("SELECT DISTINCT velov_number FROM 'velov-histo2018'")
     station = c.fetchall()
-    idn = int(self.path_info[1])
+    
     if ('velov-'+ str(data[idn-1]['idnum']),) in station:   # Rq: reg est une liste de tuples
         stations = [('velov-'+ str(data[idn-1]['idnum']),"blue")]
     else:
         print ('Erreur nom')
         self.send_error(404)    # Région non trouvée -> erreur 404
         return None
-    
+    '''
     # configuration du tracé
-    plt.figure(figsize=(18,6))
-    plt.ylim(0,15)
+    plt.figure(figsize=(12,6))
+    plt.ylim(0,30)
     plt.grid(which='major', color='#888888', linestyle='-')
     plt.grid(which='minor',axis='x', color='#888888', linestyle=':')
     
     ax = plt.subplot(111)
-    loc_major = pltd.YearLocator()
-    loc_minor = pltd.MonthLocator()
+    loc_major = pltd.HourLocator()
+    loc_minor = pltd.MinuteLocator()
     ax.xaxis.set_major_locator(loc_major)
     ax.xaxis.set_minor_locator(loc_minor)
-    format_major = pltd.DateFormatter('%B %Y')
+    format_major = pltd.DateFormatter('%H:%M')
     ax.xaxis.set_major_formatter(format_major)
     ax.xaxis.set_tick_params(labelsize=10)
     
     # boucle sur les régions
-    for l in (stations) :
-        c.execute("SELECT * FROM 'velov-histo2018' WHERE velov_number=? ORDER BY Time_ISO",l[:1])  # ou (l[0],)
+    for l in stations :
+        c.execute("SELECT * FROM 'velov-histo2018' WHERE velov_number=? ORDER BY Time_ISO",(l,))  # ou (l[0],)
         r = c.fetchall()
         # recupération de la date (colonne 2) et transformation dans le format de pyplot
-        x = [int(a[0][11:13]+a[0][14:16]) for a in r if not a[2] == '']
+        timeDebut = dt.time(int(donnee['heureDebut']),int(donnee['minuteDebut']))
+        timeFin = dt.time(int(donnee['heureFin']),int(donnee['minuteFin']))
+        x = []
+        y = []
+        for a in r:
+          time = dt.time(int(a[0][11:13]),int(a[0][14:16]))
+          jour = a[0][8:10]
+          if jour == donnee['jour'] and time > timeDebut and time < timeFin : 
+            x.append(dt.datetime(2018,11,int(donnee['jour']),time.hour,time.minute))
+            y.append(float(a[2]))
+        #x = [int(a[0][8:10]+a[0][11:13]+a[0][14:16]) for a in r if not a[2] == '']
         # récupération de la régularité (colonne 8)
-        y = [float(a[2]) for a in r if not a[2] == '']
+        #y = [float(a[2]) for a in r if not a[2] == '']
         # tracé de la courbe
-        plt.plot_date(x,y,linewidth=1, linestyle='-', marker='o', color=l[1], label=l[0])
+        couleur = [np.random.rand() for i in range(3)]
+        plt.plot_date(x,y,linewidth=1, linestyle='-', marker='o', color=couleur
+        , label=l)
         
     # légendes
     plt.legend(loc='lower left')
     plt.title('Disponibilité des velos',fontsize=16)
     plt.ylabel('Nombre de velos disponibles')
     plt.xlabel('temps')
-
+    lx = len(x)
+    if lx == 0:
+      print('Veuillez choisir la plage temporelle')
+      self.send_error(404)
+      return None
+    #x_ticks = [x[int(lx/10*i)] for i in range(0,11)]
+    #plt.xticks(x_ticks)
+    #plt.gcf().autofmt_xdate()
     # génération des courbes dans un fichier PNG
     fichier = 'dispoVelo{}.png'.format(idn)
     plt.savefig('client/{}'.format(fichier))
-
+    html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
+    if data[idn-1]['adresse2']:
+      adresse2 = data[idn-1]['adresse2']
+    else:
+      adresse2 = 'Vide'
+    body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
+                        'name':'Nom de la station : '+data[idn-1]['name'],\
+                        'adresse1':'Adresse : '+data[idn-1]['adresse1'],\
+                        'adresse2':'Complément : '+adresse2,\
+                        'commune':'Commune : '+data[idn-1]['commune'],\
+                        'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn-1]['numdansarr']),\
+                        'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn-1]['nbbornette']),\
+                        'pole':'Pole : '+data[idn-1]['pole'],\
+                        'ouverte':'Etat ouverture :'+data[idn-1]['ouverte'],\
+                        'insee': 'Code INSEE : '+str(data[idn-1]['insee']),\
+                        'image':html})
+    headers = [('Content-Type','application/json')]
+    self.send(body,headers)
+    '''
     html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
 
     headers = [('Content-Type','text/html;charset=utf-8')]
     self.send(html,headers)
-
+    '''
   def send_static(self):
 
     # on modifie le chemin d'accès en insérant le répertoire préfixe
@@ -196,5 +265,5 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
 # instanciation et lancement du serveur
-httpd = socketserver.TCPServer(("", 8080), RequestHandler)
+httpd = socketserver.TCPServer(("", 8081), RequestHandler)
 httpd.serve_forever()

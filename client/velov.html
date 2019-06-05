@@ -5,12 +5,20 @@
 <link rel="stylesheet" type="text/css" href="style.css"/>
 <meta charset="utf-8">
 <body onload="load_data();">  <!-- R��|cup��|ration des donn��|es avec le chargement de la page -->
-  <h1>STATIONS DE VELO</h1>
+ 
+
+
+  <h1>Stations de Velov'</h1>
+
+ 
+
   <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
-  <div>
-  <div id="map"></div>  
-  </div>
-<h3>CHOISIR UNE PERIODE</h3>
+<nav>    
+<div id="map"></div>  
+</nav>
+
+<aside>
+<h3>Choisir une periode</h3>
 <label>
   2018-11-<select id = "jour">
     <option value = "05">05</option>
@@ -124,8 +132,15 @@ min
   <p id = 'ouverte'></p>
   <p id = 'insee'></p>
 </div>
-<!-- Zone pour l'affichage dynamique des descriptions -->
-<p id="figure"></p>
+
+</aside>
+
+<main>
+  <!-- Zone pour l'affichage dynamique des descriptions -->
+
+  <p id="description"></p>
+
+</main>
 </body>
 <script>
   

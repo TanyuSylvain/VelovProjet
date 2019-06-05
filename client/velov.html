@@ -120,6 +120,8 @@ min
     <option value = "NON">NON</option>
   </select>
 </label>
+</aside>
+<main>
 <h4>Information de la station choisie</h4>
 <div>
   <p id = 'stationId'></p>
@@ -131,17 +133,28 @@ min
   <p id = 'nbbornette'></p>
   <p id = 'pole'></p>
   <p id = 'ouverte'></p>
-  <p id = 'insee'></p>
+
 </div>
 
-</aside>
+</main>
 
-<main>
+<main2>
+<h8>Les velos sont souvent disponibles?</h8>
   <!-- Zone pour l'affichage dynamique des descriptions -->
+  <p id = 'insee'></p>
 
   <p id="description"></p>
 
-</main>
+</main2>
+
+<f>
+<h9>Developpers:</h9>
+<p> ANSELMO HADDAD Victoria - 
+LI Chen - 
+MEDDAHI Myriam - 
+TAN Yu </p>
+<p>Ecole Centrale Lyon - 2019</p>
+</f>
 
 </body>
 <script>
@@ -157,15 +170,15 @@ function load_data () {
 var xhr = new XMLHttpRequest();
 xhr.onload = function() {   // fonction callback
     // récupération des données renvoyées par le serveur
-	var data = JSON.parse(this.responseText);
+  var data = JSON.parse(this.responseText);
     // boucle sur les enregistrements renvoyés
     for ( n = 0; n < data.length; n++ ) {
     // insertion d'un marqueur à la position, attachement d'une popup, capture de l'évènement "clic'
-	  L.marker([data[n].lat,data[n].lon]).addTo(map)
+    L.marker([data[n].lat,data[n].lon]).addTo(map)
         .bindPopup('Lieu = '+data[n].name)
-		.addEventListener('click',OnMarkerClick)
-		.idnum=data[n].id;   // propriété personnalisée ajouté au marqueur
-	  }
+    .addEventListener('click',OnMarkerClick)
+    .idnum=data[n].id;   // propriété personnalisée ajouté au marqueur
+    }
   };
 xhr.open('GET','/location',true);
 xhr.send();

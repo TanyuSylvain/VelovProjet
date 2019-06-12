@@ -1,6 +1,6 @@
 /* fond de page */
 body {
-background-image:url(test.png);
+background-image:url(fond.png);
 background-repeat: repeat;
 background-position: 0, 0;
 background-size:20vw,20vh;
@@ -27,7 +27,7 @@ background-color:grey;
   line-height: 60px;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
-  padding-left: 0.5em
+  padding-left: 0.5em;
 }
 
 .header a {
@@ -39,7 +39,11 @@ background-color:grey;
   font-size: 18px; 
   line-height: 25px;
   border-radius: 4px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 0.5em
 }
+
 
 .header a.logo {
   font-size: 25px;
@@ -81,7 +85,6 @@ nav{
   box-shadow: inset 0 0 5px 5px rgba(30,144,255,0.2);
   border-radius: 10px/10px;
   background-color: rgba(47,79,79,0.95);
-  text-shadow: 3px 3px 3px black;
   height: 53vh;
   width: 68vw;
   position: absolute;
@@ -96,12 +99,11 @@ aside {
   text-align: center;
   vertical-align:center ;
   padding-top: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 20px;
   border: none;
   box-shadow: inset 0 0 5px 5px rgba(30,144,255,0.2);
   border-radius: 10px/10px;
   background-color: rgba(47,79,79,0.95);
-  text-shadow: 3px 3px 3px black;
   width:22%;
   position: absolute;
   left: 75%;
@@ -120,7 +122,6 @@ main {
   box-shadow: inset 0 0 5px 5px rgba(30,144,255,0.2);
   border-radius: 10px/10px;
   background-color: rgba(47,79,79,0.95);
-  text-shadow: 3px 3px 3px black;
   width: 35%;
   position: absolute;
   right:58%;
@@ -129,7 +130,8 @@ main {
 
 main2 { 
   color: white;
-  text-align: center; 
+  text-align: left; 
+  font-weight: bold;
   padding-top: 25px;
   padding-left: 15px;
   padding-bottom: 21px;
@@ -138,7 +140,6 @@ main2 {
   box-shadow: inset 0 0 5px 5px rgba(30,144,255,0.2);
   border-radius: 10px/10px;
   background-color: rgba(47,79,79,0.95);
-  text-shadow: 3px 3px 3px black;
   width: 49%;
   position: absolute;
   left:45%;
@@ -146,20 +147,20 @@ main2 {
  }
 
 f { 
-  color: white;
+  color: rgba(47,79,79,0.95);
+  text-shadow: none;
+  font-weight: bold;
   text-align: left; 
   padding-top: 15px;
   padding-left: 15px;
   padding-right: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   border: none;
-  box-shadow: inset 0 0 5px 5px rgba(30,144,255,0.2);
-  border-radius: 10px/10px;
-  background-color: rgba(47,79,79,0.95);
-  text-shadow: 3px 3px 3px black;
-  width: 94vw;
+  box-shadow: inset 0 0 1px 1px rgba(1 ,1 ,1 ,0.6);
+  background-color: rgba(200,200,200,0.5);
+  width: 100vw;
   position: absolute;
-  left:1%;
+  left:0%;
   top:150vh;
  }
 

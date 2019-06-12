@@ -1,7 +1,8 @@
 # TD3-lieux-insolites.py
 
 # Application exemple : affichage de mes lieux préférés à la Croix-Rousse 2018-10-24
-
+import matplotlib
+matplotlib.use('TkAgg')
 import http.server
 import socketserver
 from urllib.parse import urlparse, parse_qs, unquote
@@ -11,6 +12,7 @@ import matplotlib.pyplot as plt
 import datetime as dt
 import matplotlib.dates as pltd
 import numpy as np
+import os
 
 # définition du handler
 class RequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -103,8 +105,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     x = []
     y = []
     while time <= timeFin:
-      x.append(dt.datetime(2018,11,int(donnee['jour']),time.hour,time.minute))
-      c.execute("SELECT * FROM 'velov-histo2018' WHERE time_ISO=?",('2018-11-'+donnee['jour']+'T'+str(time.hour)+':'+str(time.minute)+':00+00:00',))
+      timeiso = dt.datetime(2018,11,int(donnee['jour']),time.hour,time.minute).isoformat()+'+00:00'
+      c.execute("SELECT * FROM 'velov-histo2018' WHERE time_ISO=?",(timeiso,))
       r = c.fetchall()
       nbvelo = 0
       nbtot = 0
@@ -114,14 +116,9 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
           nbtot+= 1
       if nbtot:
         y.append(float(nbvelo/nbtot))
-      else:
-        y.append(0)
+        x.append(dt.datetime(2018,11,int(donnee['jour']),time.hour,time.minute))
       time = (dt.datetime(2018,11,int(donnee['jour']),time.hour,time.minute)+dt.timedelta(minutes=5)).time()
-    lx = len(y)
-    if lx < 2:
-      print('Veuillez bien choisir la plage temporelle OU station fermée')
-      html = "Veuillez bien choisir la plage temporelle. Si vous l'avez bien choisie, \
-              la station que vous consultez est actuellement fermée"
+      
     couleur = [np.random.rand() for i in range(3)]
     plt.plot_date(x,y,linewidth=1, linestyle='-', marker='o', color=couleur
     , label=commune)
@@ -131,11 +128,18 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     plt.title("Agrégation de la disponibilité dans la commune {}".format(commune),fontsize=16)
     plt.ylabel('Nombre moyen des velos disponibles')
     plt.xlabel('temps')
-
     idn = int(self.path_info[1])
-    fichier = 'ARRVelo{}.png'.format(idn)
-    plt.savefig('client/{}'.format(fichier))
-    html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
+    lx = len(y)
+    if lx < 2:
+      print('Veuillez bien choisir la plage temporelle OU station fermée')
+      html = "Veuillez bien choisir la plage temporelle. Si vous l'avez bien choisie, \
+              la station que vous consultez est actuellement fermée"
+    else:
+      fichier = 'ARRVelo{}.png'.format(idn)
+      plt.savefig('client/{}'.format(fichier))
+      html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)  
+    
+    
     if data[idn]['adresse2']:
       adresse2 = data[idn]['adresse2']
     else:
@@ -189,29 +193,30 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
       (donnee['stationId'],donnee['jour'],donnee['heureDebut'],donnee['minuteDebut'],donnee['heureFin'],donnee['minuteFin'],donnee['comparaison']))
     else:
       fichier = 'dispoVelo{}.png'.format(idn)
-      html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
-      if data[idn]['adresse2']:
-        adresse2 = data[idn]['adresse2']
-      else:
-        adresse2 = 'Vide'
-      if data[idn]['pole']:
-        pole = data[idn]['pole']
-      else:
-        pole = 'Vide'
-      body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
-                        'name':'Nom de la station : '+data[idn]['name'],\
-                        'adresse1':'Adresse : '+data[idn]['adresse1'],\
-                        'adresse2':'Complément : '+adresse2,\
-                        'commune':'Commune : '+data[idn]['commune'],\
-                        'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
-                        'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
-                        'pole':'Pole : '+pole,\
-                        'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
-                        'insee': 'Code INSEE : '+str(data[idn]['insee']),\
-                        'image':html})
-      headers = [('Content-Type','application/json')]
-      self.send(body,headers)
-      return
+      if os.path.isfile('client/'+fichier):
+        html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
+        if data[idn]['adresse2']:
+          adresse2 = data[idn]['adresse2']
+        else:
+          adresse2 = 'Vide'
+        if data[idn]['pole']:
+          pole = data[idn]['pole']
+        else:
+          pole = 'Vide'
+        body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
+                          'name':'Nom de la station : '+data[idn]['name'],\
+                          'adresse1':'Adresse : '+data[idn]['adresse1'],\
+                          'adresse2':'Complément : '+adresse2,\
+                          'commune':'Commune : '+data[idn]['commune'],\
+                          'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
+                          'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
+                          'pole':'Pole : '+pole,\
+                          'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
+                          'insee': 'Code INSEE : '+str(data[idn]['insee']),\
+                          'image':html})
+        headers = [('Content-Type','application/json')]
+        self.send(body,headers)
+        return
       
     
 

@@ -123,6 +123,25 @@ min
     <option value = "OUI">OUI</option>
   </select>
 </label>
+<label>
+  Disponibilité dans l'arrondissement<select id = "arr">
+    <option value = "NON">NON</option>
+    <option value = "VILLEURBANNE">VILLEURBANNE</option>
+    <option value = "VENISSIEUX">VENISSIEUX</option>
+    <option value = "CALUIRE-ET-CUIRE">CALUIRE-ET-CUIRE</option>
+    <option value = "VAULX-EN-VELIN">VAULX-EN-VELIN</option>
+    <option value = "Lyon 1 er">Lyon 1 er</option>
+    <option value = "Lyon 2 ème">Lyon 2 ème</option>
+    <option value = "Lyon 3 ème">Lyon 3 ème</option>
+    <option value = "Lyon 4 ème">Lyon 4 ème</option>
+    <option value = "Lyon 5 ème">Lyon 5 ème</option>
+    <option value = "Lyon 6 ème">Lyon 6 ème</option>
+    <option value = "Lyon 7 ème">Lyon 7 ème</option>
+    <option value = "Lyon 8 ème">Lyon 8 ème</option>
+    <option value = "Lyon 9 ème">Lyon 9 ème</option>
+
+  </select>
+</label>
 </aside>
 <main>
 <h4>Information de la station choisie</h4>
@@ -195,7 +214,8 @@ var jr = document.getElementById('jour').value,
       hf = document.getElementById('HeureFin').value,
       mf = document.getElementById('MinuteFin').value,
       cp = document.getElementById('comparaison').value;
-      var queryString = 'jr='+jr+'&'+'hd='+hd+'&'+'md='+md+'&'+'hf='+hf+'&'+'mf='+mf+'&'+'cp='+cp
+      arr = document.getElementById('arr').value;
+      var queryString = 'jr='+jr+'&'+'hd='+hd+'&'+'md='+md+'&'+'hf='+hf+'&'+'mf='+mf+'&'+'cp='+cp+'&'+'arr='+arr
 xhr.open('GET','/disponibilite/'+e.target.idnum+'?'+queryString,true);  // on récupère la description du lieu n° idnum par un appel au serveur
 xhr.send();
 xhr.onload = function() {   // fonction callback

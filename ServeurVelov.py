@@ -73,6 +73,91 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
   # on envoie le document statique demandé
+  def send_moyenne(self,data,donnee,commune):
+    conn = sqlite3.connect('Velov.sqlite')
+    c = conn.cursor()
+    c.execute("SELECT idstation FROM 'station-velov2018' WHERE commune=?",(commune,))
+    r = c.fetchall()
+    stations = []
+    for stationid in r:
+      stations.append('velov-'+str(stationid[0]))
+
+    # Configuration de la figure
+    plt.figure(figsize=(12,6))
+    plt.ylim(0,30)
+    plt.grid(which='major', color='#888888', linestyle='-')
+    plt.grid(which='minor',axis='x', color='#888888', linestyle=':')
+    
+    ax = plt.subplot(111)
+    loc_major = pltd.HourLocator()
+    loc_minor = pltd.MinuteLocator()
+    ax.xaxis.set_major_locator(loc_major)
+    ax.xaxis.set_minor_locator(loc_minor)
+    format_major = pltd.DateFormatter('%H:%M')
+    ax.xaxis.set_major_formatter(format_major)
+    ax.xaxis.set_tick_params(labelsize=10)
+
+    timeDebut = dt.time(int(donnee['heureDebut']),int(donnee['minuteDebut']))
+    timeFin = dt.time(int(donnee['heureFin']),int(donnee['minuteFin']))
+    time = timeDebut
+    x = []
+    y = []
+    while time <= timeFin:
+      x.append(dt.datetime(2018,11,int(donnee['jour']),time.hour,time.minute))
+      c.execute("SELECT * FROM 'velov-histo2018' WHERE time_ISO=?",('2018-11-'+donnee['jour']+'T'+str(time.hour)+':'+str(time.minute)+':00+00:00',))
+      r = c.fetchall()
+      nbvelo = 0
+      nbtot = 0
+      for a in r:
+        if a[1] in stations:
+          nbvelo += int(a[2])
+          nbtot+= 1
+      if nbtot:
+        y.append(float(nbvelo/nbtot))
+      else:
+        y.append(0)
+      time = (dt.datetime(2018,11,int(donnee['jour']),time.hour,time.minute)+dt.timedelta(minutes=5)).time()
+    lx = len(y)
+    if lx < 2:
+      print('Veuillez bien choisir la plage temporelle OU station fermée')
+      html = "Veuillez bien choisir la plage temporelle. Si vous l'avez bien choisie, \
+              la station que vous consultez est actuellement fermée"
+    couleur = [np.random.rand() for i in range(3)]
+    plt.plot_date(x,y,linewidth=1, linestyle='-', marker='o', color=couleur
+    , label=commune)
+        
+    # légendes
+    plt.legend(loc='lower left')
+    plt.title("Agrégation de la disponibilité dans la commune {}".format(commune),fontsize=16)
+    plt.ylabel('Nombre moyen des velos disponibles')
+    plt.xlabel('temps')
+
+    idn = int(self.path_info[1])
+    fichier = 'ARRVelo{}.png'.format(idn)
+    plt.savefig('client/{}'.format(fichier))
+    html = '<img src="/{}?{}" alt="disponibilite {}" width="100%">'.format(fichier,self.date_time_string(),self.path)
+    if data[idn]['adresse2']:
+      adresse2 = data[idn]['adresse2']
+    else:
+      adresse2 = 'Vide'
+    if data[idn]['pole']:
+      pole = data[idn]['pole']
+    else:
+      pole = 'Vide'
+    body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
+                      'name':'Nom de la station : '+data[idn]['name'],\
+                      'adresse1':'Adresse : '+data[idn]['adresse1'],\
+                      'adresse2':'Complément : '+adresse2,\
+                      'commune':'Commune : '+data[idn]['commune'],\
+                      'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
+                      'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
+                      'pole':'Pole : '+pole,\
+                      'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
+                      'insee': 'Code INSEE : '+str(data[idn]['insee']),\
+                      'image':html})
+    headers = [('Content-Type','application/json')]
+    self.send(body,headers)
+    return 
   def send_disponibilite(self,data):
     # Mise à jour de la base de donnée Cache
     idn = int(self.path_info[1])
@@ -85,6 +170,10 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     donnee = {'stationId':str(data[idn]['idnum']), 'jour':self.params['jr'][0], 'heureDebut':self.params['hd'][0], 'minuteDebut':self.params['md'][0], \
               'heureFin':self.params['hf'][0], 'minuteFin':self.params['mf'][0], 'comparaison':self.params['cp'][0]}
     stations = ['velov-'+ donnee['stationId']]
+    if self.params['arr'][0] != 'NON':
+      commune = self.params['arr'][0]
+      self.send_moyenne(data,donnee,commune)
+      return 
     #Mode comparaison
     if donnee['comparaison'] == 'OUI':
       stations = ['velov-'+ donnee['stationId']]
@@ -105,6 +194,10 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         adresse2 = data[idn]['adresse2']
       else:
         adresse2 = 'Vide'
+      if data[idn]['pole']:
+        pole = data[idn]['pole']
+      else:
+        pole = 'Vide'
       body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
                         'name':'Nom de la station : '+data[idn]['name'],\
                         'adresse1':'Adresse : '+data[idn]['adresse1'],\
@@ -112,7 +205,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                         'commune':'Commune : '+data[idn]['commune'],\
                         'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
                         'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
-                        'pole':'Pole : '+data[idn]['pole'],\
+                        'pole':'Pole : '+pole,\
                         'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
                         'insee': 'Code INSEE : '+str(data[idn]['insee']),\
                         'image':html})
@@ -191,8 +284,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     
     lx = len(x)
     if lx == 0:
-      print('Veuillez choisir la plage temporelle OU station fermée')
-      html = "Veuillez choisir la plage temporelle. Si vous l'avez bien choisie, \
+      print('Veuillez bien choisir la plage temporelle OU station fermée')
+      html = "Veuillez bien choisir la plage temporelle. Si vous l'avez bien choisie, \
               la station que vous consultez est actuellement fermée"
     else :
       fichier = 'dispoVelo{}.png'.format(idn)
@@ -202,6 +295,10 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
       adresse2 = data[idn]['adresse2']
     else:
       adresse2 = 'Vide'
+    if data[idn]['pole']:
+      pole = data[idn]['pole']
+    else:
+      pole = 'Vide'
     body = json.dumps({'stationId':'StationId de la station choisie : '+'Velov-'+donnee['stationId'],\
                         'name':'Nom de la station : '+data[idn]['name'],\
                         'adresse1':'Adresse : '+data[idn]['adresse1'],\
@@ -209,7 +306,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                         'commune':'Commune : '+data[idn]['commune'],\
                         'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
                         'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
-                        'pole':'Pole : '+data[idn]['pole'],\
+                        'pole':'Pole : '+pole,\
                         'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
                         'insee': 'Code INSEE : '+str(data[idn]['insee']),\
                         'image':html})

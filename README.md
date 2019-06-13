@@ -44,7 +44,7 @@ Le troisème fonctionnement est consacré à l'analyse de la disponibilité moye
 - Choix de **arrondissement**
 - Cliquer n'importe quelle station sur la carte  
 
-***Lors que la mode d'analyse régionale est activée (un arrondissement est choisi), seul le choix de la plage tempotelle est significative.***
+***Lors que la mode d'analyse régionale est activée (un arrondissement est choisi), seul le choix de la plage tempotelle est significatif.***
 
 ## Outil de développement
 - [Anaconda](https://www.anaconda.com/)

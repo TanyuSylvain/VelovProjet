@@ -43,6 +43,7 @@ Le troisème fonctionnement est consacré à l'analyse de la disponibilité moye
 - Choix de **plage temporelle**
 - Choix de **arrondissement**
 - Cliquer n'importe quelle station sur la carte  
+
 ***Lors que la mode d'analyse régionale est activée (un arrondissement est choisi), seul le choix de la plage tempotelle est significative.***
 
 ## Outil de développement
@@ -52,7 +53,7 @@ Le troisème fonctionnement est consacré à l'analyse de la disponibilité moye
 
 ## Auteurs et développeurs
 - ANSELMO HADDAD Victoria - *HTML et CSS*
-- MEDDAI Myriam - *HTML et CSS*
+- MEDDAHI Myriam - *HTML et CSS*
 - LI Chen - *HTML*
 - TAN Yu - *Serveur*
  

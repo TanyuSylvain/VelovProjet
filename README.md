@@ -42,7 +42,7 @@ Le deuxième fonctionnement vous permettra de comparer les données de différen
 Le troisème fonctionnement est consacré à l'analyse de la disponibilité moyenne des vélos dans un arrondissement. 
 - Choix de **plage temporelle**
 - Choix de **arrondissement**
-- Cliquer n'importe quelle station sur la carte
+- Cliquer n'importe quelle station sur la carte  
 ***Lors que la mode d'analyse régionale est activée (un arrondissement est choisi), seul le choix de la plage tempotelle est significative.***
 
 ## Outil de développement

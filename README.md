@@ -16,11 +16,11 @@ Avant de télécharger les fichiers, vous devriez vous diposer d'un environement
 ```
 ### Installation
 Afin d'utiliser cette application Web, il suffit de suivre les étapes suivantes :
-```
+
 - télécharger ce répertoire Github en cliquant sur **Clone or download**-->**Download ZIP**. 
 - Après avoir décompressé, exécutez le serveur **ServeurVelov.py**. 
 - Accéder à [Cette URL](http://localhost:8082/velov.html)
-```
+
 Dès maintenant vous avez fini l'installation. 
 
 ## Test des fonctionnement

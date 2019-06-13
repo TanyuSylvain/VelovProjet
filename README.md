@@ -8,12 +8,12 @@ Ces instructions vous donneront l'accès à l'ensemble des fichiers exécutables
 
 ### Pré-installation
 Avant de télécharger les fichiers, vous devriez vous diposer d'un environement composé de :  
-```
+
 - Anaconda complètement installé
 - SQlite BD Browser
 - Un compilateur Python disposant des Packages Anaconda
 - Internet connecté
-```
+
 ### Installation
 Afin d'utiliser cette application Web, il suffit de suivre les étapes suivantes :
 

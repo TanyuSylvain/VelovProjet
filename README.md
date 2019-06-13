@@ -28,11 +28,31 @@ Après que l'application Web est ouvert, une carte glissante sur laquelle se tro
 
 ### Affichage ponctuel
 Le premier fonctionnement consiste à faire afficher les informations ainsi que la courbe de disponibilité de la station dont le POI est cliqué sur la carte glissante. 
-<div class="mermaid">
-graph LR
-    A(Choix de plage temporrelle) -->B(Mettre les autres option en NON)
-    B -->C(Cliquer sur la station à consulter)  
-</div>
-<script src="mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true});</script>
+- Choix de **plage temporrelle**
+- Mettre les autres option en **NON**
+- **Cliquer** sur la station à consulter
+
+### Mode comparaison
+Le deuxième fonctionnement vous permettra de comparer les données de différentes stations. Il suffit de
+- Choix de **plage temporelle**
+- Mettre le widget **Mode Comparaison** en OUI
+- **Cliquer consécutivement** les stations que vous voulez comparer
+
+### Analyse régionale
+Le troisème fonctionnement est consacré à l'analyse de la disponibilité moyenne des vélos dans un arrondissement. 
+- Choix de **plage temporelle**
+- Choix de **arrondissement**
+- Cliquer n'importe quelle station sur la carte
+***Lors que la mode d'analyse régionale est activée (un arrondissement est choisi), seul le choix de la plage tempotelle est significative.***
+
+## Outil de développement
+- [Anaconda](https://www.anaconda.com/)
+- [Microsoft VScode](https://code.visualstudio.com/)
+- [Github Desktop](https://desktop.github.com/)
+
+## Auteurs et développeurs
+- ANSELMO HADDAD Victoria - HTML et CSS
+- MEDDAI Myriam - HTML et CSS
+- LI Chen - HTML
+- TAN Yu - Serveur
  

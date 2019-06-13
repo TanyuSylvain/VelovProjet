@@ -30,7 +30,9 @@ Après que l'application Web est ouvert, une carte glissante sur laquelle se tro
 Le premier fonctionnement consiste à faire afficher les informations ainsi que la courbe de disponibilité de la station dont le POI est cliqué sur la carte glissante. 
 - Choix de **plage temporrelle**
 - Mettre les autres option en **NON**
-- **Cliquer** sur la station à consulter
+- **Cliquer** sur la station à consulter  
+
+***Le temps d'attente peut varier en fonction de l'ordinateur. ***
 
 ### Mode comparaison
 Le deuxième fonctionnement vous permettra de comparer les données de différentes stations. Il suffit de

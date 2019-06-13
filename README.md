@@ -51,8 +51,8 @@ Le troisème fonctionnement est consacré à l'analyse de la disponibilité moye
 - [Github Desktop](https://desktop.github.com/)
 
 ## Auteurs et développeurs
-- ANSELMO HADDAD Victoria - HTML et CSS
-- MEDDAI Myriam - HTML et CSS
-- LI Chen - HTML
-- TAN Yu - Serveur
+- ANSELMO HADDAD Victoria - *HTML et CSS*
+- MEDDAI Myriam - *HTML et CSS*
+- LI Chen - *HTML*
+- TAN Yu - *Serveur*
  

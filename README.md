@@ -1,7 +1,7 @@
 # VelovProjet
 ***Bienvenue à l'application Web Vélov à Lyon.***  
 *Exploité par la société JCDecaux, [Le vélov](https://velov.grandlyon.com/) est l'un des plus grands réseaux de vélos en libre-service ouvert en France  depuis mai 2005. Commandité par le UE INF tc3, l'application web Vélov à Lyon a été conçue en vue de visualiser les données temporelles et statiqtiques de la disponibilité des vélos distribués à 349 stations à Lyon. Après 3 semaines de développement, l'application voit le jour.*  
-<center><img src=https://upload.wikimedia.org/wikipedia/fr/0/08/Logo_Velov.gif alt="LogoVelov"/></center>
+<img src=https://upload.wikimedia.org/wikipedia/fr/0/08/Logo_Velov.gif alt="LogoVelov"/>
 
 ## Pré-requis
 Ces instructions vous donneront l'accès à l'ensemble des fichiers exécutables à local pour les usages de test.
@@ -25,3 +25,11 @@ Dès maintenant vous avez fini l'installation.
 
 ## Test des fonctionnement
 Après que l'application Web est ouvert, une carte glissante sur laquelle se trouvent les POIs représentant les stations de vélos est sur la gauche. A votre droite se trouvent les widgets proposant les choix de la plage temporrelle et les modes d'analyse. L'application vous offre 3 fonctionnements principaux. 
+
+### Affichage ponctuel
+Le premier fonctionnement consiste à faire afficher les informations ainsi que la courbe de disponibilité de la station dont le POI est cliqué sur la carte glissante. 
+```
+graph TD
+    A(Choix de plage temporrelle) -->B(Mettre les autres option en NON)
+    B -->C(Cliquer sur la station à consulter)
+```

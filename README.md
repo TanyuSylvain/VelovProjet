@@ -1,7 +1,7 @@
 # VelovProjet
 ***Bienvenue à l'application Web Vélov à Lyon.***  
 *Exploité par la société JCDecaux, [Le vélov](https://velov.grandlyon.com/) est l'un des plus grands réseaux de vélos en libre-service ouvert en France  depuis mai 2005. Commandité par le UE INF tc3, l'application web Vélov à Lyon a été conçue en vue de visualiser les données temporelles et statiqtiques de la disponibilité des vélos distribués à 349 stations à Lyon. Après 3 semaines de développement, l'application voit le jour.*  
-![LogoVelov](https://upload.wikimedia.org/wikipedia/fr/0/08/Logo_Velov.gif)
+<centre>![LogoVelov](https://upload.wikimedia.org/wikipedia/fr/0/08/Logo_Velov.gif)</centre>
 
 ## Pré-requis
 Ces instructions vous donneront l'accès à l'ensemble des fichiers exécutables à local pour les usages de test.

@@ -28,8 +28,7 @@ Après que l'application Web est ouvert, une carte glissante sur laquelle se tro
 
 ### Affichage ponctuel
 Le premier fonctionnement consiste à faire afficher les informations ainsi que la courbe de disponibilité de la station dont le POI est cliqué sur la carte glissante. 
-```
 graph TD
     A(Choix de plage temporrelle) -->B(Mettre les autres option en NON)
-    B -->C(Cliquer sur la station à consulter)
-```
+    B -->C(Cliquer sur la station à consulter)  
+    

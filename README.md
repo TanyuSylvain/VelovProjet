@@ -32,7 +32,7 @@ La première fonctionnalité consiste à  afficher les informations ainsi que la
 - Mettre les autres options sur **NON**
 - **Cliquer** sur la station à consulter  
 
-***Le temps d'attente peut varier en fonction de l'ordinateur. ***
+***Le temps d'attente peut varier en fonction de l'ordinateur.***
 
 ### Mode comparaison
 La deuxième fonctionnalité vous permettra de comparer les données des différentes stations. Il suffit de :

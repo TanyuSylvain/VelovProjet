@@ -19,7 +19,7 @@ Afin d'utiliser cette application Web, il suffit de suivre les étapes suivantes
 
 - Télécharger ce répertoire Github en cliquant sur **Clone or download**-->**Download ZIP**. 
 - Après avoir décompressé le dit fichier, exécutez le serveur **ServeurVelov.py**. 
-- Accéder à [Cette URL](http://localhost:8082/velov.html)
+- Accéder à [Cette URL](http://localhost:8081/velov.html)
 
 Dès lors vous avez fini l'installation et pouvez utiliser l'application. 
 

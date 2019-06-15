@@ -169,6 +169,13 @@ f {
   position: absolute;
   left:0%;
   top:150vh;
+  -webkit-columns: 2 100px;
+  -moz-columns: 2 100px;
+  columns: 2 100px;
+  -webkit-column-rule: 2px dashed #314F4F;
+  -moz-column-rule: 2px dashed #314F4F;
+  column-rule: 2px dashed #314F4F;
+  column-gap: 40px
  }
 
 /* polices de caractères */

@@ -25,7 +25,7 @@ background-color:grey;
   width: 97%;
   height: 60px;
   line-height: 60px;
-  padding-top: 0.5em;
+  padding-top: 0.3em;
   padding-bottom: 0.5em;
   padding-left: 0.5em;
 }
@@ -128,9 +128,15 @@ main {
   top:73vh;
  }
 
+h4 {color: white;
+  text-align: center; 
+
+}
+
+
 main2 { 
   color: white;
-  text-align: left; 
+  text-align: center; 
   font-weight: bold;
   padding-top: 25px;
   padding-left: 15px;
@@ -145,6 +151,7 @@ main2 {
   left:45%;
   top:73vh;
  }
+
 
 f { 
   color: rgba(47,79,79,0.95);

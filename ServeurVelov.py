@@ -126,14 +126,14 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     # légendes
     plt.legend(loc='lower left')
     plt.title("Agrégation de la disponibilité dans la commune {}".format(commune),fontsize=16)
-    plt.ylabel('Nombre moyen des velos disponibles')
-    plt.xlabel('temps')
+    plt.ylabel('Nombre moyen des vélos disponibles')
+    plt.xlabel('Temps')
     idn = int(self.path_info[1])
     lx = len(y)
     if lx < 2:
       print('Veuillez bien choisir la plage temporelle OU station fermée')
-      html = "Veuillez bien choisir la plage temporelle. Si vous l'avez bien choisie, \
-              la station que vous consultez est actuellement fermée"
+      html = "Veuillez vous assurez que la plage temporelle est valide. \
+              Si c'est le cas, la station que vous consultez est actuellement fermée"
     else:
       fichier = 'ARRVelo{}.png'.format(idn)
       plt.savefig('client/{}'.format(fichier))
@@ -153,10 +153,10 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                       'adresse1':'Adresse : '+data[idn]['adresse1'],\
                       'adresse2':'Complément : '+adresse2,\
                       'commune':'Commune : '+data[idn]['commune'],\
-                      'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
-                      'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
-                      'pole':'Pole : '+pole,\
-                      'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
+                      'numdansarr':'Numéro de la station selon le code arrondissement : '+str(data[idn]['numdansarr']),\
+                      'nbbornette':'Nombre de bornettes dans cette station : '+str(data[idn]['nbbornette']),\
+                      'pole':'Pôle : '+pole,\
+                      'ouverte':'État :'+data[idn]['ouverte'],\
                       'insee': 'Code INSEE : '+str(data[idn]['insee']),\
                       'image':html})
     headers = [('Content-Type','application/json')]
@@ -208,10 +208,10 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                           'adresse1':'Adresse : '+data[idn]['adresse1'],\
                           'adresse2':'Complément : '+adresse2,\
                           'commune':'Commune : '+data[idn]['commune'],\
-                          'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
-                          'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
-                          'pole':'Pole : '+pole,\
-                          'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
+                          'numdansarr':'Numéro de la station selon le code arrondissement : '+str(data[idn]['numdansarr']),\
+                          'nbbornette':'Nombre de bornettes dans cette station : '+str(data[idn]['nbbornette']),\
+                          'pole':'Pôle : '+pole,\
+                          'ouverte':'État :'+data[idn]['ouverte'],\
                           'insee': 'Code INSEE : '+str(data[idn]['insee']),\
                           'image':html})
         headers = [('Content-Type','application/json')]
@@ -277,9 +277,9 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         
     # légendes
     plt.legend(loc='lower left')
-    plt.title('Disponibilité des velos',fontsize=16)
-    plt.ylabel('Nombre de velos disponibles')
-    plt.xlabel('temps')
+    plt.title('Disponibilité des vélos',fontsize=16)
+    plt.ylabel('Nombre de vélos disponibles')
+    plt.xlabel('Temps')
     
     
     #x_ticks = [x[int(lx/10*i)] for i in range(0,11)]
@@ -292,6 +292,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
       print('Veuillez bien choisir la plage temporelle OU station fermée')
       html = "Veuillez bien choisir la plage temporelle. Si vous l'avez bien choisie, \
               la station que vous consultez est actuellement fermée"
+              
     else :
       fichier = 'dispoVelo{}.png'.format(idn)
       plt.savefig('client/{}'.format(fichier))
@@ -309,10 +310,10 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                         'adresse1':'Adresse : '+data[idn]['adresse1'],\
                         'adresse2':'Complément : '+adresse2,\
                         'commune':'Commune : '+data[idn]['commune'],\
-                        'numdansarr':'Numéro de la station dans la code arrondissement: '+str(data[idn]['numdansarr']),\
-                        'nbbornette':'Nombre de bornettes dans la station : '+str(data[idn]['nbbornette']),\
-                        'pole':'Pole : '+pole,\
-                        'ouverte':'Etat ouverture :'+data[idn]['ouverte'],\
+                        'numdansarr':'Numéro de la station selon la code arrondissement : '+str(data[idn]['numdansarr']),\
+                        'nbbornette':'Nombre de bornettes dans cette station : '+str(data[idn]['nbbornette']),\
+                        'pole':'Pôle : '+pole,\
+                        'ouverte':'État :'+data[idn]['ouverte'],\
                         'insee': 'Code INSEE : '+str(data[idn]['insee']),\
                         'image':html})
     headers = [('Content-Type','application/json')]

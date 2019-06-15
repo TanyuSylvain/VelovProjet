@@ -2,7 +2,7 @@
 
 # Application exemple : affichage de mes lieux préférés à la Croix-Rousse 2018-10-24
 import matplotlib
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
 import http.server
 import socketserver
 from urllib.parse import urlparse, parse_qs, unquote

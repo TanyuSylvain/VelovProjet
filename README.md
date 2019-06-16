@@ -1,13 +1,13 @@
 # Projet Vélo'v
 ***Bienvenue sur l'application Web Vélo'v à Lyon.***  
-*Exploité par la société JCDecaux, [Le vélo'v](https://velov.grandlyon.com/) est l'un des plus grands réseaux de vélos en libre-service ouvert en France depuis mai 2005. Commandité par le UE INF tc3, l'application web Vélo'v à Lyon a été conçue en vue de visualiser les données temporelles et statiqtiques de disponibilité des vélos distribués dans 349 stations à Lyon. Après 3 semaines de développement, l'application a vu le jour.*  
+*Exploité par la société JCDecaux, [Le vélo'v](https://velov.grandlyon.com/) est l'un des plus grands réseaux de vélos en libre-service ouvert en France depuis mai 2005. Commandité par le UE INF tc3, l'application web Vélo'v à Lyon a été conçue en vue de visualiser les données temporelles et statistiques de disponibilité des vélos distribués dans 349 stations à Lyon. Après 3 semaines de développement, l'application a vu le jour.*  
 <img src=https://upload.wikimedia.org/wikipedia/fr/0/08/Logo_Velov.gif alt="LogoVelov"/>
 
 ## Pré-requis
 Ces instructions vous permettont d'accéder à l'ensemble des fichiers exécutables en local pour effectuer les tests.
 
 ### Pré-installation
-Avant de télécharger les fichiers, vous devez diposer d'un environement composé de :  
+Avant de télécharger les fichiers, vous devez disposer d'un environement composé de :  
 
 - Anaconda complètement installé
 - SQlite BD Browser
